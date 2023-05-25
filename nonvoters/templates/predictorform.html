@@ -68,7 +68,7 @@
 
         <div class="hyperparameter-tuning">
             <h2>Hyperparameter Tuning Results</h2>
-            <div>Best model parameters: <strong>{{ best_model }}</strong></div>
+            <div>Best model parameters: <strong>{{ model_params }}</strong></div>
             <div>Model accuracy: <strong>{{ predicted }}</strong></div>
         </div>
 
@@ -87,7 +87,7 @@
         </div>
 
         <div class="model-testing">
-            <h2>Try out our model:</h2>
+            <h2>Try Out Our Model:</h2>
             <form action="http://localhost:9999/results" method="POST">
                 <p>
                     Education:

@@ -43,9 +43,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>Output</h1>
+        <h1>Model Results</h1>
+        <div class="input">
+            <h2>Model Input: </h2>
+            <div>
+                <div>Education: <strong>{{ education }}</strong></div>
+                <div>Race: <strong>{{ race }}</strong></div>
+                <div>Gender: <strong>{{ gender }}</strong></div>    
+                <div>Income: <strong>{{ income }}</strong></div>
+            </div> 
+        </div>
         <div class="output">
-            <div>Model Output: <strong>{{ model_output }}</strong></div>
+            <h2>Model Output:</h2>
+            <div>Our model predicts voting habits will be:</div>
+            <div><strong>{{ model_output }}</strong></div>
         </div>
     </div>
 </body>

@@ -21,14 +21,14 @@ class Nonvoters:
         df = df.drop(['RespId'], axis=1)
 
         # Define mapping for educ variable
-        educ_mapping = {
+        self.educ_mapping = {
             'High school or less': 0,
             'Some college': 1,
             'College': 2
         }
 
         # Define mapping for income_cat variable
-        income_cat_mapping = {
+        self.income_cat_mapping = {
             'Less than $40k': 0,
             '$40-75k': 1,
             '$75-125k': 2,
@@ -36,16 +36,16 @@ class Nonvoters:
         }
 
         # Define mapping for voter_category variable
-        voter_category_mapping = {
+        self.voter_category_mapping = {
             'rarely/never': 0,
             'sporadic': 1,
             'always': 2
         }
 
         # Map educ, income_cat, and voter_category variables to integer values
-        df['educ'] = df['educ'].map(educ_mapping)
-        df['income_cat'] = df['income_cat'].map(income_cat_mapping)
-        df['voter_category'] = df['voter_category'].map(voter_category_mapping)
+        df['educ'] = df['educ'].map(self.educ_mapping)
+        df['income_cat'] = df['income_cat'].map(self.income_cat_mapping)
+        df['voter_category'] = df['voter_category'].map(self.voter_category_mapping)
 
         # Perform one-hot encoding for race and gender variables
         df = pd.get_dummies(df, columns=['race', 'gender'])
@@ -116,3 +116,30 @@ class Nonvoters:
         recall = recall_score(self.y_test, self.y_pred, average='weighted', zero_division=0)
 
         return round(accuracy, 4), round(variance, 4), round(mse, 4), round(precision, 4), round(recall, 4)
+    
+    # Make a voter category prediction based on given input
+    def make_prediction(self, in_education, in_race, in_gender, in_income, model):
+        # Preprocess the input data
+        # Create a dictionary to store the input data in the correct order
+        input_data = {
+            'educ': self.educ_mapping[in_education],
+            'income_cat': self.income_cat_mapping[in_income],
+            'race_Black': int(in_race == 'black'),
+            'race_Hispanic': int(in_race == 'hispanic'),
+            'race_Other/Mixed': int(in_race == 'other'),
+            'race_White': int(in_race == 'white'),
+            'gender_Female': int(in_gender == 'female'),
+            'gender_Male': int(in_gender == 'male'),
+        }
+
+        # Create a DataFrame from the input data
+        input_df = pd.DataFrame(input_data, index=[0])
+
+        # Make predictions using the trained model
+        predicted_label = model.predict(input_df)
+
+        # Map numeric label to voter category
+        mapping = {0: 'rarely/never', 1: 'sporadic', 2: 'always'}
+
+        return mapping[predicted_label[0]]
+
